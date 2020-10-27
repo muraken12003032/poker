@@ -1,6 +1,8 @@
+import Deck from './deck.js';
+
 class Table {
-  constructor(deck) {
-    this.deck = deck;
+  constructor() {
+    this.deck = new Deck;
     this.field = [];
     this.garbage = [];
     this.btn = 0;

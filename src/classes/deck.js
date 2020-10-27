@@ -14,8 +14,8 @@ class Deck extends Array{
     }
   }
 
-  deal = () => {
-    console.log('deal');
+  deal() {
+    console.log('card kubaru');
   }
 }
 
