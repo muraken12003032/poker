@@ -4,14 +4,13 @@ class Deck extends Array{
     super();
     var rand = 0;
     var arr = [];
-    for(var i = 0;i<52;i++) { arr.push(i); }
-    for(var j = 0; j <= 51; j++){
-      rand = Math.floor(Math.random() * arr.length);
-      //rand = i;
-      console.log(rand);
-      this.push(new Card(rand));
-      arr.splice(rand,1);
+    while(arr.length < 52){
+      rand = this.int_random(53,1)-1;
+      if(arr.indexOf(rand)<0){
+        arr.push(rand);
+      }
     }
+    arr.forEach(e => this.push(new Card(e)));
   }
 
   deal(players) {
@@ -21,6 +20,10 @@ class Deck extends Array{
         players[j].hand.push(this.pull());
       }
     }
+  }
+
+  int_random(max,min) {
+    return Math.floor(Math.random()*(max-min)+min);
   }
 
   pull() {

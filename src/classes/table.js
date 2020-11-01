@@ -8,6 +8,7 @@ class Table {
     this.garbage = [];
     this.btn = 0;
     this.players = [];
+    this.pot = 0;
 
     //常に自分は着席した状態
     this.join(true,0);
@@ -15,6 +16,14 @@ class Table {
 
   join(me,sheet) {
       this.players.push(new Player(me,sheet));
+  }
+
+  payoff(player,pot) {
+    console.log('勝者にチップを渡すmethod');
+  }
+
+  judge(players) {
+    console.log('誰が勝ったか判定するmethod');
   }
 
   join_enemies(number_of_enemy){
