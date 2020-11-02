@@ -5,6 +5,9 @@ import { Button, Table as HtmlTable } from 'react-bootstrap';
 import Table from '../classes/table.js';
 import Deck from '../classes/deck.js';
 
+import Hand from '../components/hand.js'
+import Field from '../components/field.js'
+
 class PokerTable extends Component {
 
   constructor() {
@@ -18,91 +21,9 @@ class PokerTable extends Component {
     console.log(this.state.table);
   }
 
-  hand(player) {
-    return(
-      <HtmlTable bordered hover>
-        <thead>
-          <tr>
-            <th>card1</th>
-            <th>card2</th>
-            <th>blind</th>
-            <th>button</th>
-            <th>chip</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            {player.hand[0].is_visible ? (<td>{player.hand[0].numeric}{player.hand[0].mark}</td>) : (<td>??</td>) }
-            {player.hand[1].is_visible ? (<td>{player.hand[1].numeric}{player.hand[1].mark}</td>) : (<td>??</td>) }
-            <td>0</td>
-            <td>0</td>
-            <td>{player.chip}</td>
-          </tr>
-        </tbody>
-      </HtmlTable>
-    )
-  }
-
-  field() {
-    return(
-      <div>
-        <p>pot: {this.state.table.pot}</p>
-        <HtmlTable bordered hover>
-          <tbody>
-            <tr>
-              {this.state.table.field[0] === undefined ? (<td>空</td>) : (<td>{this.state.table.field[0].numeric}{this.state.table.field[0].mark}</td>)}
-              {this.state.table.field[1] === undefined ? (<td>空</td>) : (<td>{this.state.table.field[1].numeric}{this.state.table.field[1].mark}</td>)}
-              {this.state.table.field[2] === undefined ? (<td>空</td>) : (<td>{this.state.table.field[2].numeric}{this.state.table.field[2].mark}</td>)}
-              {this.state.table.field[3] === undefined ? (<td>空</td>) : (<td>{this.state.table.field[3].numeric}{this.state.table.field[3].mark}</td>)}
-              {this.state.table.field[4] === undefined ? (<td>空</td>) : (<td>{this.state.table.field[4].numeric}{this.state.table.field[4].mark}</td>)}
-            </tr>
-          </tbody>
-        </HtmlTable>
-      </div>
-    )
-  }
-
-  table_component(status){
-    return(
-      <div className="container">
-        <h3>current_status: {status}</h3>
-        <div className="row">
-          <div className="col-lg-6">
-            <p>enemy hand</p>
-            {this.hand(this.state.table.players[1])}
-          </div>
-        </div>
-        <br />
-        <div className="row">
-          <div className="col-lg-6">
-            <p>場</p>
-            {this.field()}
-          </div>
-        </div>
-        <br />
-        <div className="row">
-          <div className="col-lg-6">
-            <p>my hand</p>
-            {this.hand(this.state.table.players[0])}
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-lg-6">
-            <Button className="btn btn-primary" onClick={() => this.next()}>call</Button>
-            <Button className="btn btn-default" onClick={() => this.next()}>bet</Button>
-            <Button className="btn btn-danger" onClick={() => this.reset()}>fold</Button>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
   /*
-
     表示を切り替えるmethod
-
   */
-
   reset() {
     this.state.table.payoff(this.state.table.players[0],this.state.table.pot);
     this.state.table.deck = new Deck();
@@ -144,11 +65,8 @@ class PokerTable extends Component {
     );
   }
 
-
   /*
-
   ステータスによってcomponentを切り替えていくmethod
-
   */
   preflop() {
     this.state.table.join_enemies(1);
@@ -199,6 +117,41 @@ class PokerTable extends Component {
     });
     //flopのコンポーネントを表示
     return(this.table_component('showdown'));
+  }
+
+  table_component(status){
+    return(
+      <div className="container">
+        <h3>current_status: {status}</h3>
+        <div className="row">
+          <div className="col-lg-6">
+            <p>enemy hand</p>
+            <Hand player={this.state.table.players[1]} />
+          </div>
+        </div>
+        <br />
+        <div className="row">
+          <div className="col-lg-6">
+            <p>場</p>
+            <Field table={this.state.table} />
+          </div>
+        </div>
+        <br />
+        <div className="row">
+          <div className="col-lg-6">
+            <p>my hand</p>
+            <Hand player={this.state.table.players[0]} />
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-lg-6">
+            <Button className="btn btn-primary" onClick={() => this.next()}>call</Button>
+            <Button className="btn btn-default" onClick={() => this.next()}>bet</Button>
+            <Button className="btn btn-danger" onClick={() => this.reset()}>fold</Button>
+          </div>
+        </div>
+      </div>
+    )
   }
 
 
