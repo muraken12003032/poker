@@ -17,7 +17,7 @@ class Deck extends Array{
     //カードは各プレイヤーに2枚配るので i<2
     for(let i = 0; i < 2; i++) {
       for(let j = 0; j < players.length; j++){
-        players[j].hand.push(this.pull());
+        players[j].hand.push(this.pull(players[j].me));
       }
     }
   }
@@ -26,8 +26,12 @@ class Deck extends Array{
     return Math.floor(Math.random()*(max-min)+min);
   }
 
-  pull() {
-    return this.shift();
+  pull(is_visible) {
+    let card = this.shift();
+    if(is_visible){
+      card.is_visible = true;
+    }
+    return card;
   }
 }
 

@@ -19,6 +19,7 @@ class Table {
   }
 
   payoff(player,pot) {
+    this.pot += pot;
     console.log('勝者にチップを渡すmethod');
   }
 

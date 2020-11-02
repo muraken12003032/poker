@@ -7,6 +7,10 @@ class Player {
     this.hand = [];
     this.chip = 100;
   }
+
+  bet(num){
+    this.chip = this.chip - num;
+  }
 }
 
 export default Player;
