@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
-import { Button, Table as HtmlTable } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 
 import Table from '../classes/table.js';
 import Deck from '../classes/deck.js';
@@ -8,13 +8,15 @@ import Deck from '../classes/deck.js';
 import Hand from '../components/hand.js'
 import Field from '../components/field.js'
 
+let status = ['before_deal','preflop','flop','turn','river','showdown'];
+
 class PokerTable extends Component {
 
   constructor() {
     super();
     this.state = {
       table: new Table(),
-      component: this.before_deal(),
+      //component: this.before_deal(),
       //status: 0:before_deal, 1:preflop, 2:flop, 3:turn, 4:river, 5:showdown
       status: 0
     };
@@ -56,14 +58,6 @@ class PokerTable extends Component {
     }
   }
 
-  before_deal(){
-    return(
-      <div>
-        <p>this is poker table</p>
-        <Button className="btn btn-primary" onClick={() => this.setState({component: this.preflop(), status: 1})}>カードを配る</Button>
-      </div>
-    );
-  }
 
   /*
   ステータスによってcomponentを切り替えていくmethod
@@ -119,10 +113,10 @@ class PokerTable extends Component {
     return(this.table_component('showdown'));
   }
 
-  table_component(status){
+  render() {
     return(
       <div className="container">
-        <h3>current_status: {status}</h3>
+        <h3>current_status: {status[this.state.status]}</h3>
         <div className="row">
           <div className="col-lg-6">
             <p>enemy hand</p>
@@ -152,11 +146,6 @@ class PokerTable extends Component {
         </div>
       </div>
     )
-  }
-
-
-  render() {
-    return(this.state.component)
   }
 }
 
