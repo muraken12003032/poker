@@ -18,6 +18,11 @@ class Table {
       this.players.push(new Player(me,sheet));
   }
 
+  clean() {
+    this.deck = new Deck();
+    this.players.forEach(player => player.hand = []);
+  }
+
   payoff(player,pot) {
     this.pot += pot;
     console.log('勝者にチップを渡すmethod');
