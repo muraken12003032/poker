@@ -8,7 +8,7 @@ import Deck from '../classes/deck.js';
 import Hand from '../components/hand.js'
 import Field from '../components/field.js'
 
-let status = ['before_deal','preflop','flop','turn','river','showdown'];
+let status = ['preflop','flop','turn','river','showdown'];
 
 class PokerTable extends Component {
 
@@ -16,36 +16,37 @@ class PokerTable extends Component {
     super();
     this.state = {
       table: new Table(),
-      //component: this.before_deal(),
-      //status: 0:before_deal, 1:preflop, 2:flop, 3:turn, 4:river, 5:showdown
       status: 0
     };
-    console.log(this.state.table);
+    //敵プレイヤーを追加し、カードを配る
+    this.state.table.join_enemies(1);
+    this.state.table.deck.deal(this.state.table.players);
   }
 
   /*
     表示を切り替えるmethod
   */
+  /*
   reset() {
     this.state.table.payoff(this.state.table.players[0],this.state.table.pot);
     this.state.table.deck = new Deck();
     this.setState({component: this.before_deal(), status: 0});
   }
+  */
 
   next() {
     console.log(this.state.status)
     switch(this.state.status) {
       case 0:
-        this.setState({component: this.preflop(), status: this.state.status + 1});
+        this.flop();
         break;
+      // 1 と 2で同じ分岐
       case 1:
-        this.setState({component: this.flop(), status: this.state.status + 1});
-        break;
       case 2:
-        this.setState({component: this.turn(), status: this.state.status + 1});
+        this.turn_and_river();
         break;
       case 3:
-        this.setState({component: this.river(), status: this.state.status + 1});
+        this.showdown();
         break;
       case 4:
         this.setState({component: this.showdown(), status: this.state.status + 1});
@@ -62,44 +63,24 @@ class PokerTable extends Component {
   /*
   ステータスによってcomponentを切り替えていくmethod
   */
-  preflop() {
-    this.state.table.join_enemies(1);
-    this.state.table.deck.deal(this.state.table.players);
-    return(this.table_component('preflop'));
-  }
-
   flop() {
-    //1枚捨てて
+    //1枚捨てて3枚表示する
     this.state.table.garbage.push(this.state.table.deck.pull(false));
-
-    //3枚表示する
     for(let i = 0; i<3; i++){
       this.state.table.field.push(this.state.table.deck.pull(true));
     }
-    //flopのコンポーネントを表示
-    return(this.table_component('flop'));
+
+    //コンポーネントを再表示
+    this.setState({table: this.state.table, status: this.state.status + 1});
   }
 
-  turn() {
-    //1枚捨てて
+  turn_and_river() {
+    //1枚捨てて1枚表示
     this.state.table.garbage.push(this.state.table.deck.pull(false));
-
-    //1枚表示する
     this.state.table.field.push(this.state.table.deck.pull(true));
 
-    //flopのコンポーネントを表示
-    return(this.table_component('turn'));
-  }
-
-  river() {
-    //1枚捨てて
-    this.state.table.garbage.push(this.state.table.deck.pull(false));
-
-    //1枚表示する
-    this.state.table.field.push(this.state.table.deck.pull(true));
-
-    //flopのコンポーネントを表示
-    return(this.table_component('river'));
+    //コンポーネントを再表示
+    this.setState({table: this.state.table, status: this.state.status + 1})
   }
 
   showdown() {
@@ -109,8 +90,8 @@ class PokerTable extends Component {
         player.hand.forEach(card => card.is_visible = true);
       }
     });
-    //flopのコンポーネントを表示
-    return(this.table_component('showdown'));
+    //コンポーネントを再表示
+    this.setState({table: this.state.table, status: this.state.status + 1})
   }
 
   render() {
