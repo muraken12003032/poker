@@ -20,6 +20,8 @@ class Table {
 
   clean() {
     this.deck = new Deck();
+    this.field = [];
+    this.garbage = [];
     this.players.forEach(player => player.hand = []);
   }
 
